@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-dz2
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: micsvc-dz2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: micsvc-dz2
+    spec:
+      containers:
+        - name: deployment-micsvc-dz2
+          image: alexdmit999/micsvc-dz2
+          ports:
+            - name: web
+              containerPort: 8000
