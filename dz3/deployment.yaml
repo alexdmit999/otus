@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-dz3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micsvc-dz3
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: micsvc-dz3
+    spec:
+      containers:
+        - name: deployment-micsvc-dz3
+          image: alexdmit999/micsvc-dz3
+          command: ['/bin/bash', 'run.sh']
+          ports:
+            - name: web
+              containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: postgres-credentials
+            - configMapRef:
+                name: django-config
+          # env:
+          #   - name: POSTGRES_USER
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: postgres-credentials
+          #         key: user
+
+          #   - name: POSTGRES_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: postgres-credentials
+          #         key: password
+            
+          #   - name: POSTGRES_HOST
+          #     value: postgres-service

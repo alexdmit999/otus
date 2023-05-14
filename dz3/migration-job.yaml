@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: django-migrations
+spec:
+  template:
+    spec:
+      containers:
+      - name: deployment-dz3
+        image: micsvc-dz3:v2
+        command: ['python', 'manage.py', 'migrate']
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: postgres-credentials
+                
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: postgres-credentials
+
+          - name: POSTGRES_HOST
+            value: postgres-service
+      restartPolicy: Never
+  backoffLimit: 5
